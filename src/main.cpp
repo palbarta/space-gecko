@@ -7,8 +7,11 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
+#include <sstream>
 
+#include "bullet.h"
 #include "space_ship.h"
+#include "star.h"
 #include "map.h"
 
 ////////////////////////////////////////////////////////////
@@ -20,16 +23,20 @@
 int main()
 {
 	std::srand(static_cast<unsigned int>(std::time(NULL)));
-
+	std::vector<SceneObject*> scene_objects;
 	// Define some constants
 	const float pi = 3.14159f;
-	const Map map(800, 600);
+	
 	float ballRadius = 10.f;
 
+	auto&& video_modes = sf::VideoMode::getFullscreenModes();
+
 	// Create the window of the application
-	sf::RenderWindow window(sf::VideoMode(map.width(), map.height(), 32), "Space Gecko",
-		sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow window(video_modes[0], "Space Gecko", sf::Style::Fullscreen);
 	window.setVerticalSyncEnabled(true);
+
+	sf::Vector2u window_size = window.getSize();
+	const Map map(window_size.x, window_size.y);
 
 	// Load the sounds used in the game
 	sf::SoundBuffer ballSoundBuffer;
@@ -50,16 +57,20 @@ int main()
 	if (!font.loadFromFile("resources/sansation.ttf"))
 		return EXIT_FAILURE;
 
-	SpaceShip space_ship(map, 0);
 	
+	const int number_of_stars = 100;
+	for (int i=0; i < number_of_stars; ++i) {
+		scene_objects.push_back(new Star(map));
+	}
+
+	SpaceShip space_ship(map, 0);
+	scene_objects.push_back(&space_ship);
 
 	// Initialize the pause message
-	/*sf::Text pauseMessage;
-	pauseMessage.setFont(font);
-	pauseMessage.setCharacterSize(40);
-	pauseMessage.setPosition(170.f, 150.f);
-	pauseMessage.setFillColor(sf::Color::White);
-	pauseMessage.setString("Welcome to SFML pong!\nPress space to start the game");*/
+	sf::Text debug_message;
+	debug_message.setFont(font);
+	debug_message.setCharacterSize(30);
+	debug_message.setFillColor(sf::Color::White);
 
 	// Define the paddles properties
 	sf::Clock shootingTimer;
@@ -88,7 +99,7 @@ int main()
 			// Space key pressed: play
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space))
 			{
-				
+				scene_objects.push_back(new Bullet(map, space_ship));
 			}
 		}
 
@@ -111,6 +122,12 @@ int main()
 			ableToShoot = true;
 		}
 
+		/*debug_message.setPosition(space_ship.shape().getPosition());
+		std::stringstream ss;
+		auto&& x = space_ship.shape().getPosition().x - map.midPoint().x;
+		auto&& y = space_ship.shape().getPosition().y - map.midPoint().y;
+		ss << "x:" << x << ", y:" << y << ", deg:" << space_ship.angle();
+		debug_message.setString(ss.str());*/
 		// Move the ball
 		//float factor = ballSpeed * deltaTime;
 		//ball.move(std::cos(ballAngle) * factor, std::sin(ballAngle) * factor);
@@ -146,15 +163,13 @@ int main()
 			ball.setPosition(rightPaddle.getPosition().x - ballRadius - paddleSize.x / 2 - 0.1f, ball.getPosition().y);
 		}*/
 
-		// Clear the window
+		// Draw
 		window.clear(map.backgroundColor());
-
-		// Draw the paddles and the ball
-		window.draw(space_ship.shape());
-		//window.draw(rightPaddle);
-		//window.draw(ball);
-
-		// Display things on screen
+		for (auto&& scene_object : scene_objects) {
+			scene_object->update(dt);
+			window.draw(scene_object->shape());	
+		}
+		window.draw(debug_message);
 		window.display();
 	}
 
