@@ -13,9 +13,8 @@ public:
 
 private:
 	void setupShape();
-	bool outsideOfMapLimits() const;
 
 private:
 	const sf::Vector2f direction_;
-	const float speed_ { 500.0f };
+	const float speed_ { 2000.0f };
 };

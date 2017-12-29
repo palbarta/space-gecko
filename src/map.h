@@ -4,8 +4,7 @@
 class Map
 {
 public:
-	Map(int width, int height);
-	~Map();
+	Map(sf::Vector2u window_size);
 
 	int width() const { return width_; }
 	int height() const { return height_; }

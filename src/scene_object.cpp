@@ -3,41 +3,56 @@
 
 #include <cmath>
 
+constexpr double pi = 3.141592653589793;
+
 SceneObject::SceneObject(const Map& map)
 	: map_(map)
 {
 }
 
 float
-SceneObject::angleRadian() const
+SceneObject::inwardAngleRadian() const
 {
 	auto&& mid = map_.midPoint();
 	auto&& pos = shape_.getPosition();
 	const float dx = pos.x - mid.x;
 	const float dy = pos.y - mid.y;
 	const float angle = std::atan(dy / dx);
-	return angle;
+	const float final_angle = dx > 0.0f ? pi + angle : angle;
+	return final_angle;
 }
 
 float
-SceneObject::angleDegree() const
+SceneObject::inwardAngleDegree() const
 {
-	return angleRadian() * 180 / 3.1415;
+	return inwardAngleRadian() * 180 / pi;
+}
+
+sf::Vector2f
+SceneObject::inwardDirection() const
+{
+	return sf::Vector2f(std::cos(inwardAngleRadian()), std::sin(inwardAngleRadian()));
 }
 
 void
-SceneObject::setAngleAndPosition(float angle)
+SceneObject::setPosition(float angle, float radius)
 {
-	static const float radius = 250;
 	auto&& mid = map_.midPoint();
 	const float x = mid.x + std::cos(angle)*radius;
 	const float y = mid.y + std::sin(angle)*radius;
 	shape_.setPosition(x, y);
-	shape_.setRotation(angle * 180 / 3.1415);
+	shape_.setRotation(angle * 180 / pi);
 }
 
 void
-SceneObject::setAngleByPosition()
+SceneObject::setRotation()
 {
-	shape_.setRotation(angleDegree());
+	shape_.setRotation(inwardAngleDegree());
+}
+
+bool
+SceneObject::outsideOfMapLimits() const
+{
+	return shape_.getPosition().x < 0 || shape_.getPosition().x > map_.width() ||
+		shape_.getPosition().y < 0 || shape_.getPosition().y > map_.height();
 }

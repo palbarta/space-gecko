@@ -61,7 +61,7 @@ Star::update(float dt)
 	age_ = calcAge();
 	color_.a = age_ * 255.0f;
 	shape_.setFillColor(color_);
-	setAngleByPosition();
+	setRotation();
 	shape_.setSize(sf::Vector2f(2 + age_ * 20, 2));
 }
 

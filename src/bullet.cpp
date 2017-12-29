@@ -4,12 +4,10 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <cmath>
-
 
 Bullet::Bullet(const Map& map, const SpaceShip& owner)
 	: SceneObject(map)
-	, direction_(std::cos(owner.angleRadian()), std::sin(owner.angleRadian()))
+	, direction_(owner.inwardDirection())
 {
 	setupShape();
 	shape_.setPosition(owner.shape().getPosition());
@@ -32,17 +30,11 @@ void
 Bullet::update(float dt)
 {
 	if (outsideOfMapLimits()) {
+		is_active_ = false;
 		return;
 	}
 	
 	float x_offset = direction_.x * speed_ * dt;
 	float y_offset = direction_.y * speed_ * dt;
 	shape_.move(x_offset, y_offset);
-}
-
-bool
-Bullet::outsideOfMapLimits() const
-{
-	return shape_.getPosition().x < 0 || shape_.getPosition().x > map_.width() ||
-		   shape_.getPosition().y < 0 || shape_.getPosition().y > map_.height();
 }

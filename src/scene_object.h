@@ -9,14 +9,18 @@ public:
 	SceneObject(const Map& map);
 	const sf::RectangleShape& shape() const { return shape_; }
 	virtual void update(float dt) = 0;
-	float angleRadian() const;
-	float angleDegree() const;
+	float inwardAngleRadian() const;
+	float inwardAngleDegree() const;
+	sf::Vector2f inwardDirection() const;
+	bool isActive() const { return is_active_; }
 
 protected:
-	void  setAngleAndPosition(float angle);
-	void  setAngleByPosition();
+	void  setPosition(float angle, float radius);
+	void  setRotation();
+	bool outsideOfMapLimits() const;
 
 protected:
 	const Map& map_;
 	sf::RectangleShape shape_;
+	bool is_active_{ true };
 };
