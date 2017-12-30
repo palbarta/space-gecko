@@ -15,9 +15,12 @@ public:
 	bool isActive() const { return is_active_; }
 
 protected:
-	void  setPosition(float angle, float radius);
+	void  setPosition(float angle, float radius_fraction);
 	void  setRotation();
 	bool outsideOfMapLimits() const;
+
+private:
+	void  setAbsolutePosition(float angle, float radius);
 
 protected:
 	const Map& map_;

@@ -1,15 +1,16 @@
 #include "space_ship.h"
 #include "map.h"
-#include "settings.h"
+#include "config.h"
 
 #include <SFML/Graphics.hpp>
 
 SpaceShip::SpaceShip(const Map& map, float initial_angle)
 	: SceneObject(map)
+	, cfg_(Config::getInstance().space_ship_)
 	, initial_angle_(initial_angle)
 {
 	setupShape();
-	setPosition(initial_angle, 400);
+	setPosition(initial_angle, cfg_.radius_fraction_to_edge_of_screen_);
 	shooting_timer_.restart();
 }
 
@@ -48,16 +49,16 @@ SpaceShip::moveRight(float dt)
 void
 SpaceShip::move(float dt, int dir)
 {
-	const float angle_covered = dir * speed_ * dt;
+	const float angle_covered = dir * cfg_.speed_ * dt;
 	const float new_angle = initial_angle_ + angle_covered;
 	initial_angle_ = new_angle;
-	setPosition(new_angle, 400);
+	setPosition(new_angle, cfg_.radius_fraction_to_edge_of_screen_);
 }
 
 bool
 SpaceShip::shoot()
 {
-	if (shooting_timer_.getElapsedTime() > shooting_interval_)
+	if (shooting_timer_.getElapsedTime() > cfg_.shooting_interval_in_seconds_)
 	{
 		shooting_timer_.restart();
 		return true;

@@ -2,6 +2,8 @@
 
 #include "scene_object.h"
 
+struct SpaceShipConfig;
+
 class SpaceShip : public SceneObject
 {
 public:
@@ -18,11 +20,10 @@ private:
 	void move(float dt, int dir);
 
 private:
-	const float speed_{ 3.0f };
+	const SpaceShipConfig& cfg_;
 	float initial_angle_;
 
 	// Shooting
 	sf::Clock shooting_timer_;
-	const sf::Time shooting_interval_ = sf::seconds(0.2f);
 };
 

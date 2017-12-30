@@ -8,6 +8,7 @@
 #include <list>
 #include <unordered_map>
 
+#include "config.h"
 #include "scene.h"
 
 typedef void(Scene::*SceneAction)(float); // function pointer type
@@ -36,6 +37,7 @@ HandleSceneActions(Scene& scene, float dt)
 
 int main()
 {
+	Config::getInstance().readConfigFile("settings.cfg");
 	BindKeysToSceneActions();
 
 	std::srand(static_cast<unsigned int>(std::time(NULL)));

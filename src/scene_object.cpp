@@ -35,13 +35,20 @@ SceneObject::inwardDirection() const
 }
 
 void
-SceneObject::setPosition(float angle, float radius)
+SceneObject::setAbsolutePosition(float angle, float radius)
 {
 	auto&& mid = map_.midPoint();
 	const float x = mid.x + std::cos(angle)*radius;
 	const float y = mid.y + std::sin(angle)*radius;
 	shape_.setPosition(x, y);
 	shape_.setRotation(angle * 180 / pi);
+}
+
+void
+SceneObject::setPosition(float angle, float radius_fraction)
+{
+	const float radius = radius_fraction * std::min(map_.width(), map_.height()) * 0.5f;
+	setAbsolutePosition(angle, radius);
 }
 
 void
