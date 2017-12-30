@@ -6,6 +6,9 @@
 
 #include <list>
 
+class Bullet;
+class Enemy;
+
 class Scene
 {
 public:
@@ -15,11 +18,18 @@ public:
 	void moveSpaceShipCounterClockwise(float dt);
 	void shootWithSpaceShip(float dt);
 	void update(float dt);
+	void handleCollisions();
 	const std::list<SceneObject*>& objects() const { return objects_; }
 	const sf::Color& backgroundColor() const { return map_.backgroundColor(); }
+	
+private:
+	void removeDestroyedObjects();
+	bool doCollide(const SceneObject& obj1, const SceneObject& obj2) const;
 
 protected:
 	const Map map_;
 	SpaceShip space_ship_;
 	std::list<SceneObject*> objects_;
+	std::list<Bullet*> bullets_;
+	std::list<Enemy*> enemies_;
 };

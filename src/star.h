@@ -6,7 +6,6 @@ class Star : public SceneObject
 {
 public:
 	Star(const Map& map);
-	~Star();
 	void update(float dt);
 
 private:

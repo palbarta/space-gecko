@@ -1,7 +1,32 @@
 #include "scene.h"
 
 #include "bullet.h"
+#include "enemy.h"
 #include "star.h"
+
+#include "Box2D/Collision/b2Collision.h"
+
+namespace {
+
+template<typename T>
+void
+RemoveDestroyedObjectsFromList(std::list<T*>& objects, bool delete_object)
+{
+	auto it = objects.begin();
+	while (it != objects.end()) {
+		const T* object = *it;
+		if (!object->isAlive()) {
+			it = objects.erase(it);
+			if (delete_object)
+				delete object;
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+}
 
 Scene::Scene(sf::Vector2u window_size)
 	: map_(window_size)
@@ -10,6 +35,14 @@ Scene::Scene(sf::Vector2u window_size)
 	const int number_of_stars = 100;
 	for (int i = 0; i < number_of_stars; ++i) {
 		objects_.push_back(new Star(map_));
+
+	}
+
+	const int number_of_enemies = 5;
+	for (int i = 0; i < number_of_enemies; ++i) {
+		Enemy* enemy = new Enemy(map_);
+		enemies_.push_back(enemy);
+		objects_.push_back(enemy);
 	}
 
 	objects_.push_back(&space_ship_);
@@ -31,22 +64,48 @@ void
 Scene::shootWithSpaceShip(float dt)
 {
 	if (space_ship_.shoot()) {
-		objects_.push_back(new Bullet(map_, space_ship_));
+		Bullet* bullet = new Bullet(map_, space_ship_);
+		bullets_.push_back(bullet);
+		objects_.push_back(bullet);
 	}
 }
 
 void 
 Scene::update(float dt)
 {
-	auto it = objects_.begin();
-	while (it != objects_.end()) {
-		auto&& object = *it;
-		object->update(dt);
-		if (!object->isActive()) {
-			it = objects_.erase(it);
-		}
-		else {
-			++it;
+	std::for_each(objects_.begin(), objects_.end(), [dt](auto* obj) { obj->update(dt); });
+	handleCollisions();
+	removeDestroyedObjects();
+}
+
+void
+Scene::removeDestroyedObjects()
+{
+	RemoveDestroyedObjectsFromList<Bullet>(bullets_, false);
+	RemoveDestroyedObjectsFromList<Enemy>(enemies_, false);
+	RemoveDestroyedObjectsFromList<SceneObject>(objects_, true);
+}
+
+void
+Scene::handleCollisions()
+{
+	for (auto&& bullet : bullets_) {
+		for (auto&& enemy : enemies_) {
+			if (doCollide(*bullet, *enemy)) {
+				bullet->destroy();
+				enemy->destroy();
+			}
 		}
 	}
+}
+
+
+bool Scene::doCollide(const SceneObject& obj_a, const SceneObject& obj_b) const
+{
+	b2Transform xf_a, xf_b;
+	auto&& pos_a = obj_a.shape().getPosition();
+	xf_a.Set(b2Vec2(pos_a.x, pos_a.y), obj_a.shape().getRotation());
+	auto&& pos_b = obj_b.shape().getPosition();
+	xf_b.Set(b2Vec2(pos_b.x, pos_b.y), obj_b.shape().getRotation());
+	return b2TestOverlap(&obj_a.b2Shape(), 0, &obj_b.b2Shape(), 0, xf_a, xf_b);
 }

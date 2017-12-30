@@ -10,6 +10,7 @@ Bullet::Bullet(const Map& map, const SpaceShip& owner)
 	, direction_(owner.inwardDirection())
 {
 	setupShape();
+	setupB2Shape();
 	shape_.setPosition(owner.shape().getPosition());
 }
 
@@ -30,7 +31,7 @@ void
 Bullet::update(float dt)
 {
 	if (outsideOfMapLimits()) {
-		is_active_ = false;
+		is_alive_ = false;
 		return;
 	}
 	

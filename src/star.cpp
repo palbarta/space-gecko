@@ -1,21 +1,10 @@
 #include "star.h"
 #include "map.h"
+#include "util.h"
 
 #include <SFML/Graphics.hpp>
 
 #include <cmath>
-
-float
-RandomMinusOneToOne()
-{
-	return ((double)std::rand()) / RAND_MAX * 2.0f - 1.0f;
-}
-
-sf::Vector2f 
-RandomDirection()
-{
-	return sf::Vector2f(RandomMinusOneToOne(), RandomMinusOneToOne());
-}
 
 Star::Star(const Map& map)
 	: SceneObject(map)
@@ -23,10 +12,6 @@ Star::Star(const Map& map)
 	reset();
 	setupShape();
 	setInitialPosition();
-}
-
-Star::~Star()
-{
 }
 
 void
@@ -42,8 +27,7 @@ Star::setupShape()
 void 
 Star::setInitialPosition()
 {
-	static const int offset = 10;
-	shape_.setPosition(map_.width() / 2.0f + offset * direction_.x, map_.height() / 2.0f + offset * direction_.y);
+	shape_.setPosition(map_.width() / 2.0f, map_.height() / 2.0f);
 }
 
 void

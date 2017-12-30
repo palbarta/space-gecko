@@ -63,3 +63,9 @@ SceneObject::outsideOfMapLimits() const
 	return shape_.getPosition().x < 0 || shape_.getPosition().x > map_.width() ||
 		shape_.getPosition().y < 0 || shape_.getPosition().y > map_.height();
 }
+
+void
+SceneObject::setupB2Shape()
+{
+	b2_shape_.SetAsBox(shape_.getSize().x / 2.0f, shape_.getSize().y / 2.0f);
+}

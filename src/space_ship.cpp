@@ -10,6 +10,7 @@ SpaceShip::SpaceShip(const Map& map, float initial_angle)
 	, initial_angle_(initial_angle)
 {
 	setupShape();
+	setupB2Shape();
 	setPosition(initial_angle, cfg_.radius_fraction_to_edge_of_screen_);
 	shooting_timer_.restart();
 }
