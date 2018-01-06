@@ -5,8 +5,9 @@
 
 constexpr double pi = 3.141592653589793;
 
-SceneObject::SceneObject(const Map& map)
+SceneObject::SceneObject(const Map& map, float shape_rotation)
 	: map_(map)
+	, shape_rotation_(shape_rotation)
 {
 }
 
@@ -38,10 +39,10 @@ void
 SceneObject::setAbsolutePosition(float angle, float radius)
 {
 	auto&& mid = map_.midPoint();
-	const float x = mid.x + std::cos(angle)*radius;
-	const float y = mid.y + std::sin(angle)*radius;
+	const float x = mid.x + std::cos(angle * pi / 180)*radius;
+	const float y = mid.y + std::sin(angle * pi / 180)*radius;
 	shape_.setPosition(x, y);
-	shape_.setRotation(angle * 180 / pi);
+	shape_.setRotation(shape_rotation_ + angle);
 }
 
 void
@@ -54,7 +55,7 @@ SceneObject::setPosition(float angle, float radius_fraction)
 void
 SceneObject::setRotation()
 {
-	shape_.setRotation(inwardAngleDegree());
+	shape_.setRotation(shape_rotation_ + inwardAngleDegree());
 }
 
 bool

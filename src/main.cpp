@@ -8,6 +8,7 @@
 #include <list>
 #include <unordered_map>
 
+#include "asset_store.h"
 #include "config.h"
 #include "scene.h"
 
@@ -38,6 +39,10 @@ HandleSceneActions(Scene& scene, float dt)
 int main()
 {
 	Config::getInstance().readConfigFile("settings.cfg");
+	const bool loaded_resources_successfully = AssetStore::getInstance().readFiles();
+	if (!loaded_resources_successfully)
+		return EXIT_FAILURE;
+	
 	BindKeysToSceneActions();
 
 	std::srand(static_cast<unsigned int>(std::time(NULL)));
@@ -47,17 +52,6 @@ int main()
 	window.setVerticalSyncEnabled(true);
 
 	Scene scene(window.getSize());
-
-	// Load the sounds used in the game
-	sf::SoundBuffer ballSoundBuffer;
-	if (!ballSoundBuffer.loadFromFile("resources/ball.wav"))
-		return EXIT_FAILURE;
-	sf::Sound ballSound(ballSoundBuffer);
-
-	// Load the text font
-	sf::Font font;
-	if (!font.loadFromFile("resources/sansation.ttf"))
-		return EXIT_FAILURE;
 
 	sf::Clock clock;
 	while (window.isOpen())

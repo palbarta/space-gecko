@@ -7,7 +7,7 @@ class Map;
 class SceneObject
 {
 public:
-	SceneObject(const Map& map);
+	SceneObject(const Map& map, float shape_rotation = 0.0f);
 	const sf::RectangleShape& shape() const { return shape_; }
 	const b2PolygonShape& b2Shape() const { return b2_shape_; }
 	virtual void update(float dt) = 0;
@@ -27,8 +27,9 @@ private:
 	void  setAbsolutePosition(float angle, float radius);
 
 protected:
-	const Map& map_;
 	sf::RectangleShape shape_;
+	const Map& map_;
+	const float shape_rotation_;
 	b2PolygonShape b2_shape_;
 	bool is_alive_{ true };
 };

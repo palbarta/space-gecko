@@ -1,11 +1,13 @@
 #include "space_ship.h"
-#include "map.h"
+
+#include "asset_store.h"
 #include "config.h"
+#include "map.h"
 
 #include <SFML/Graphics.hpp>
 
 SpaceShip::SpaceShip(const Map& map, float initial_angle)
-	: SceneObject(map)
+	: SceneObject(map, -90.0f)
 	, cfg_(Config::getInstance().space_ship_)
 	, initial_angle_(initial_angle)
 {
@@ -22,12 +24,15 @@ SpaceShip::~SpaceShip()
 void
 SpaceShip::setupShape()
 {
-	sf::Vector2f size(25, 100);
-	shape_.setSize(size - sf::Vector2f(3, 3));
-	shape_.setOutlineThickness(3);
-	shape_.setOutlineColor(sf::Color::White);
-	shape_.setFillColor(sf::Color(200, 100, 100));
-	shape_.setOrigin(size / 2.f);
+	shape_.setTexture(&AssetStore::getInstance().textures().space_ship_texture_, true);
+	sf::Vector2f size(shape_.getTextureRect().width, shape_.getTextureRect().height);
+	shape_.setSize(size);
+	const float scale = 0.25f;
+	shape_.setScale(scale, scale);
+	//shape_.setOutlineThickness(3);
+	//shape_.setOutlineColor(sf::Color::White);
+	//shape_.setFillColor(sf::Color(200, 100, 100));
+	shape_.setOrigin(shape_.getSize() / 2.f);
 }
 
 void
