@@ -10,6 +10,7 @@
 
 #include "asset_store.h"
 #include "config.h"
+#include "debug.h"
 #include "scene.h"
 
 typedef void(Scene::*SceneAction)(float); // function pointer type
@@ -52,6 +53,7 @@ int main()
 	window.setVerticalSyncEnabled(true);
 
 	Scene scene(window.getSize());
+	Debug debug(scene);
 
 	sf::Clock clock;
 	while (window.isOpen())
@@ -72,13 +74,17 @@ int main()
 		float dt = clock.restart().asSeconds();
 		HandleSceneActions(scene, dt);
 		scene.update(dt);
+		debug.update(dt);
 		
 		// Draw
 		window.clear(scene.backgroundColor());
 		for (const auto* scene_object : scene.objects()) {
 			window.draw(scene_object->shape());
 		}
-		//window.draw(debug_message);
+		for (const auto* debug_object : debug.objects()) {
+			window.draw(*debug_object);
+		}
+
 		window.display();
 	}
 

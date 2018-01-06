@@ -9,13 +9,15 @@ class SceneObject
 public:
 	SceneObject(const Map& map, float shape_rotation = 0.0f);
 	const sf::RectangleShape& shape() const { return shape_; }
-	const b2PolygonShape& b2Shape() const { return b2_shape_; }
 	virtual void update(float dt) = 0;
 	float inwardAngleRadian() const;
 	float inwardAngleDegree() const;
 	sf::Vector2f inwardDirection() const;
 	bool isAlive() const { return is_alive_; }
 	void destroy() { is_alive_ = false; }
+
+	const b2PolygonShape& box2dShape() const { return b2_shape_; }
+	const b2Transform box2dTransform() const;
 
 protected:
 	void  setPosition(float angle, float radius_fraction);

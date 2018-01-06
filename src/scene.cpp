@@ -102,10 +102,5 @@ Scene::handleCollisions()
 
 bool Scene::doCollide(const SceneObject& obj_a, const SceneObject& obj_b) const
 {
-	b2Transform xf_a, xf_b;
-	auto&& pos_a = obj_a.shape().getPosition();
-	xf_a.Set(b2Vec2(pos_a.x, pos_a.y), obj_a.shape().getRotation());
-	auto&& pos_b = obj_b.shape().getPosition();
-	xf_b.Set(b2Vec2(pos_b.x, pos_b.y), obj_b.shape().getRotation());
-	return b2TestOverlap(&obj_a.b2Shape(), 0, &obj_b.b2Shape(), 0, xf_a, xf_b);
+	return b2TestOverlap(&obj_a.box2dShape(), 0, &obj_b.box2dShape(), 0, obj_a.box2dTransform(), obj_b.box2dTransform());
 }

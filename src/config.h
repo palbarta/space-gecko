@@ -9,6 +9,10 @@ struct SpaceShipConfig {
 	sf::Time shooting_interval_in_seconds_ = sf::seconds(0.2f);
 };
 
+struct DebugConfig {
+	bool draw_bounding_boxes_ = false;
+};
+
 struct Config
 {
 	static Config& getInstance() 
@@ -20,6 +24,7 @@ struct Config
 	void readConfigFile(const std::string& file_path);
 
 	SpaceShipConfig space_ship_;
+	DebugConfig debug_;
 
 private:
 	Config() {};

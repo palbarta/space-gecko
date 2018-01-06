@@ -26,4 +26,6 @@ Config::readConfigFile(const std::string& file_path)
 	space_ship_.radius_fraction_to_edge_of_screen_ = root["space_ship"]["radius_fraction_to_edge_of_screen"].as<float>();
 	space_ship_.speed_ = root["space_ship"]["speed"].as<float>();
 	space_ship_.shooting_interval_in_seconds_ = sf::seconds(root["space_ship"]["shooting_interval_in_seconds"].as<float>());
+
+	debug_.draw_bounding_boxes_ = root["debug"]["draw_bounding_boxes"].as<bool>();
 }

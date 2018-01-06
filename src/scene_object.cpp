@@ -45,6 +45,15 @@ SceneObject::setAbsolutePosition(float angle, float radius)
 	shape_.setRotation(shape_rotation_ + angle);
 }
 
+const b2Transform
+SceneObject::box2dTransform() const
+{
+	b2Transform transform;
+	auto&& pos_a = shape_.getPosition();
+	transform.Set(b2Vec2(pos_a.x, pos_a.y), shape_.getRotation() * pi / 180);
+	return transform;
+}
+
 void
 SceneObject::setPosition(float angle, float radius_fraction)
 {
@@ -68,5 +77,5 @@ SceneObject::outsideOfMapLimits() const
 void
 SceneObject::setupB2Shape()
 {
-	b2_shape_.SetAsBox(shape_.getSize().x / 2.0f, shape_.getSize().y / 2.0f);
+	b2_shape_.SetAsBox(shape_.getSize().x * shape_.getScale().x / 2.0f, shape_.getSize().y * shape_.getScale().y / 2.0f);
 }

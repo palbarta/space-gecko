@@ -29,9 +29,6 @@ SpaceShip::setupShape()
 	shape_.setSize(size);
 	const float scale = 0.25f;
 	shape_.setScale(scale, scale);
-	//shape_.setOutlineThickness(3);
-	//shape_.setOutlineColor(sf::Color::White);
-	//shape_.setFillColor(sf::Color(200, 100, 100));
 	shape_.setOrigin(shape_.getSize() / 2.f);
 }
 
