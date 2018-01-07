@@ -60,6 +60,18 @@ Scene::moveSpaceShipCounterClockwise(float dt)
 	space_ship_.moveRight(dt);
 }
 
+void 
+Scene::moveSpaceShipInwards(float dt)
+{
+	space_ship_.moveInwards(dt);
+}
+
+void 
+Scene::moveSpaceShipOutwards(float dt)
+{
+	space_ship_.moveOutwards(dt);
+}
+
 void
 Scene::shootWithSpaceShip(float dt)
 {

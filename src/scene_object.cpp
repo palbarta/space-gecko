@@ -57,6 +57,7 @@ SceneObject::box2dTransform() const
 void
 SceneObject::setPosition(float angle, float radius_fraction)
 {
+	radial_position_ = radius_fraction;
 	const float radius = radius_fraction * std::min(map_.width(), map_.height()) * 0.5f;
 	setAbsolutePosition(angle, radius);
 }
@@ -65,6 +66,12 @@ void
 SceneObject::setRotation()
 {
 	shape_.setRotation(shape_rotation_ + inwardAngleDegree());
+}
+
+void
+SceneObject::setScale()
+{
+	shape_.setScale(object_scale_ * radial_position_, object_scale_ * radial_position_);
 }
 
 bool

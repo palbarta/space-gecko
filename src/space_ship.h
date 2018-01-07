@@ -13,11 +13,14 @@ public:
 	void update(float dt);
 	void moveLeft(float dt);
 	void moveRight(float dt);
+	void moveInwards(float dt);
+	void moveOutwards(float dt);
+	void radialMove(float dt, int dir);
 	bool shoot();
 
 private:
 	void setupShape();
-	void move(float dt, int dir);
+	void angularMove(float dt, int dir);
 
 private:
 	const SpaceShipConfig& cfg_;

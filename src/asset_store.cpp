@@ -4,10 +4,10 @@ bool
 AssetStore::readFiles()
 {
 	// Load the sounds used in the game
-	sf::SoundBuffer ballSoundBuffer;
+	/*sf::SoundBuffer ballSoundBuffer;
 	if (!ballSoundBuffer.loadFromFile("resources/ball.wav"))
 		return false;
-	sf::Sound ballSound(ballSoundBuffer);
+	sf::Sound ballSound(ballSoundBuffer);*/
 
 	// Load textures
 	if (!textures_.space_ship_texture_.loadFromFile("resources/space_ship.png"))

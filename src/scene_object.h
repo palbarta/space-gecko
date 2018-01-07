@@ -20,8 +20,9 @@ public:
 	const b2Transform box2dTransform() const;
 
 protected:
-	void  setPosition(float angle, float radius_fraction);
-	void  setRotation();
+	void setPosition(float angle, float radius_fraction);
+	void setRotation();
+	void setScale();
 	bool outsideOfMapLimits() const;
 	void setupB2Shape();
 
@@ -34,4 +35,6 @@ protected:
 	const float shape_rotation_;
 	b2PolygonShape b2_shape_;
 	bool is_alive_{ true };
+	float object_scale_ { 1.0f };
+	float radial_position_ { 0.0f };
 };

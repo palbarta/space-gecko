@@ -16,6 +16,8 @@ public:
 
 	void moveSpaceShipClockwise(float dt);
 	void moveSpaceShipCounterClockwise(float dt);
+	void moveSpaceShipInwards(float dt);
+	void moveSpaceShipOutwards(float dt);
 	void shootWithSpaceShip(float dt);
 	void update(float dt);
 	void handleCollisions();
