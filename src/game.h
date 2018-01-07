@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene_object.h"
+#include "scene.h"
 
 class Game
 {
@@ -8,5 +8,5 @@ public:
 	Game();
 
 private:
-	Scene scene_;
+	//Scene scene_;
 };

@@ -1,4 +1,5 @@
 #include "control_mapping.h"
+#include <string>
 
 using namespace sf;
 

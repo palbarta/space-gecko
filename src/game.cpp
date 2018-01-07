@@ -2,7 +2,7 @@
 
 Game::Game()
 {
-	Config::getInstance().readConfigFile("settings.cfg");
+	/*Config::getInstance().readConfigFile("settings.cfg");
 	const bool loaded_resources_successfully = AssetStore::getInstance().readFiles();
 	if (!loaded_resources_successfully)
 		return EXIT_FAILURE;
@@ -17,5 +17,5 @@ Game::Game()
 	window.setVerticalSyncEnabled(Config::getInstance().system_.vsync_);
 
 	Scene scene(window.getSize());
-	Debug debug(scene);
+	Debug debug(scene);*/
 }

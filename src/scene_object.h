@@ -8,6 +8,7 @@ class SceneObject
 {
 public:
 	SceneObject(const Map& map, float shape_rotation = 0.0f);
+	virtual ~SceneObject() {};
 	const sf::RectangleShape& shape() const { return shape_; }
 	virtual void update(float dt) = 0;
 	float inwardAngleRadian() const;
