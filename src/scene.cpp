@@ -6,6 +6,8 @@
 
 #include "Box2D/Collision/b2Collision.h"
 
+#include <iostream>
+
 namespace {
 
 template<typename T>
@@ -35,7 +37,6 @@ Scene::Scene(sf::Vector2u window_size)
 	const int number_of_stars = 100;
 	for (int i = 0; i < number_of_stars; ++i) {
 		objects_.push_back(new Star(map_));
-
 	}
 
 	const int number_of_enemies = 5;
@@ -46,6 +47,11 @@ Scene::Scene(sf::Vector2u window_size)
 	}
 
 	objects_.push_back(&space_ship_);
+}
+
+Scene::~Scene()
+{
+	// TODO: Memory leak for dynamic objects
 }
 
 void

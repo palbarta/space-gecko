@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <iostream>
+
 SpaceShip::SpaceShip(const Map& map, float initial_angle)
 	: SceneObject(map, -90.0f)
 	, cfg_(Config::getInstance().space_ship_)

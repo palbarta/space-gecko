@@ -13,6 +13,7 @@ class Scene
 {
 public:
 	Scene(sf::Vector2u window_size);
+	~Scene();
 
 	void moveSpaceShipClockwise(float dt);
 	void moveSpaceShipCounterClockwise(float dt);
