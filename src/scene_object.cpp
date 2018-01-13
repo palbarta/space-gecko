@@ -45,6 +45,18 @@ SceneObject::setAbsolutePosition(float angle, float radius)
 	shape_.setRotation(shape_rotation_ + angle);
 }
 
+float 
+SceneObject::radialPosition() const
+{
+	auto&& pos = shape_.getPosition();
+}
+
+float 
+SceneObject::angularPosition() const
+{
+	return 0.0f;
+}
+
 const b2Transform
 SceneObject::box2dTransform() const
 {
@@ -57,11 +69,16 @@ SceneObject::box2dTransform() const
 void
 SceneObject::setPosition(float angle, float radius_fraction)
 {
-	radial_position_ = radius_fraction;
 	const float radius = radius_fraction * std::min(map_.width(), map_.height()) * 0.5f;
 	setAbsolutePosition(angle, radius);
 }
 
+void
+SceneObject::move(float d_angle, float d_radius)
+{
+
+}
+/*
 void
 SceneObject::setRotation()
 {
@@ -71,8 +88,8 @@ SceneObject::setRotation()
 void
 SceneObject::setScale()
 {
-	shape_.setScale(object_scale_ * radial_position_, object_scale_ * radial_position_);
-}
+	shape_.setScale(object_scale_ * radialPosition(), object_scale_ * radialPosition());
+}*/
 
 bool
 SceneObject::outsideOfMapLimits() const

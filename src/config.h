@@ -1,15 +1,16 @@
 #pragma once
 
-#include <string>
 #include <SFML/Graphics.hpp>	
+#include "yaml-cpp/yaml.h"
+#include <string>
 
 struct ControlConfig {
-	sf::Keyboard::Key move_clockwise_ = sf::Keyboard::Key::Left;
-	sf::Keyboard::Key move_counterclockwise_ = sf::Keyboard::Key::Right;
-	sf::Keyboard::Key move_inwards_ = sf::Keyboard::Key::Up;
-	sf::Keyboard::Key move_outwards_ = sf::Keyboard::Key::Down;
-	sf::Keyboard::Key fire_ = sf::Keyboard::Key::Space;
-	sf::Keyboard::Key reset_scene_ = sf::Keyboard::Key::R;
+	std::vector<sf::Keyboard::Key> move_clockwise_ = { sf::Keyboard::Key::Left };
+	std::vector<sf::Keyboard::Key> move_counterclockwise_ = { sf::Keyboard::Key::Right };
+	std::vector<sf::Keyboard::Key> move_inwards_ = { sf::Keyboard::Key::Up };
+	std::vector<sf::Keyboard::Key> move_outwards_ = { sf::Keyboard::Key::Down };
+	std::vector<sf::Keyboard::Key> fire_ = { sf::Keyboard::Key::Space };
+	std::vector<sf::Keyboard::Key> reset_scene_ = { sf::Keyboard::Key::R };
 };
 
 struct DebugConfig {
@@ -35,6 +36,7 @@ struct Config
 		return instance;
 	}
 
+
 	void readConfigFile(const std::string& file_path);
 
 	ControlConfig control_;
@@ -44,4 +46,9 @@ struct Config
 	
 private:
 	Config() {};
+	void parseYAML(const std::string& file_path);
+	std::vector<sf::Keyboard::Key> parseKeyboardControls(const std::string& action);
+
+private:
+	YAML::Node root_;
 };

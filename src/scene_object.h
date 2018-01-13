@@ -22,13 +22,16 @@ public:
 
 protected:
 	void setPosition(float angle, float radius_fraction);
-	void setRotation();
-	void setScale();
+	void move(float d_angle, d_radius);
+	//void setRotation();
+	//void setScale();
 	bool outsideOfMapLimits() const;
 	void setupB2Shape();
 
 private:
-	void  setAbsolutePosition(float angle, float radius);
+	void setAbsolutePosition(float angle, float radius);
+	float radialPosition() const;
+	float angularPosition() const;
 
 protected:
 	sf::RectangleShape shape_;
@@ -37,5 +40,6 @@ protected:
 	b2PolygonShape b2_shape_;
 	bool is_alive_{ true };
 	float object_scale_ { 1.0f };
-	float radial_position_ { 0.0f };
+	float radial_direction_  { 0.0f };
+	float angular_direction_ { 0.0f };
 };

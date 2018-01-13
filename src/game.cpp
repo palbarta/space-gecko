@@ -15,20 +15,29 @@
 #include "config.h"
 #include "debug.h"
 #include "scene.h"
+#include "util.h"
 
 typedef void(Scene::*SceneAction)(float); // function pointer type
 std::vector<std::pair<sf::Keyboard::Key, SceneAction>> keys_to_actions;
+
+void
+BindSingleAction(const std::vector<sf::Keyboard::Key>& key_list, SceneAction&& scene_action)
+{
+	for (auto&& key : key_list) {
+		keys_to_actions.emplace_back(key, scene_action);
+	}
+}
 
 void
 BindKeysToSceneActions()
 {
 	keys_to_actions.clear();
 	auto&& cfg = Config::getInstance().control_;
-	keys_to_actions.emplace_back(cfg.move_clockwise_,			&Scene::moveSpaceShipClockwise);
-	keys_to_actions.emplace_back(cfg.move_counterclockwise_, 	&Scene::moveSpaceShipCounterClockwise);
-	keys_to_actions.emplace_back(cfg.move_inwards_,				&Scene::moveSpaceShipInwards);
-	keys_to_actions.emplace_back(cfg.move_outwards_,			&Scene::moveSpaceShipOutwards);
-	keys_to_actions.emplace_back(cfg.fire_,						&Scene::shootWithSpaceShip);
+	BindSingleAction(cfg.move_clockwise_,			&Scene::moveSpaceShipClockwise);
+	BindSingleAction(cfg.move_counterclockwise_, &Scene::moveSpaceShipCounterClockwise);
+	BindSingleAction(cfg.move_inwards_,				&Scene::moveSpaceShipInwards);
+	BindSingleAction(cfg.move_outwards_,			&Scene::moveSpaceShipOutwards);
+	BindSingleAction(cfg.fire_,						&Scene::shootWithSpaceShip);
 }
 
 
@@ -87,8 +96,8 @@ Game::run()
 				break;
 			}	
 			
-			auto&& cfg = Config::getInstance().control_;
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == cfg.reset_scene_)) {
+			auto&& controls = Config::getInstance().control_;
+			if ((event.type == sf::Event::KeyPressed) && EqualsAnyOf(controls.reset_scene_, event.key.code)) {
 				init();
 			}
 		}

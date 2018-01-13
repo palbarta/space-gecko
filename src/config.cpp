@@ -2,45 +2,52 @@
 
 #include "control_mapping.h"
 
-#include "yaml-cpp/yaml.h"
-
 #include <fstream>
 #include <iostream>
 
-YAML::Node
-ParseYAML(const std::string& file_path) {
+void
+Config::parseYAML(const std::string& file_path) {
 	YAML::Node doc;
 	std::ifstream input_stream;
 	input_stream.open(file_path);
   	try {
-		doc = YAML::Load(input_stream);
+		root_ = YAML::Load(input_stream);
     } catch (const YAML::Exception& e) {
     	std::cerr << e.what() << "\n";
   	}
+}
 
-	return doc;
+std::vector<sf::Keyboard::Key>
+Config::parseKeyboardControls(const std::string& action)
+{
+	auto&& controls = root_["control"]["keyboard"];
+	std::vector<sf::Keyboard::Key> key_list;
+	for (auto&& key_str : controls[action].as<std::vector<std::string>>()) {
+		key_list.push_back(cfg_entry_to_key[key_str]);
+	}
+	return key_list;
 }
 
 void
 Config::readConfigFile(const std::string& file_path)
 {
 	try {
-		YAML::Node root = ParseYAML(file_path);
-		space_ship_.radius_fraction_to_edge_of_screen_ = root["space_ship"]["radius_fraction_to_edge_of_screen"].as<float>();
-		space_ship_.angular_speed_ = root["space_ship"]["angular_speed"].as<float>();
-		space_ship_.radial_speed_ = root["space_ship"]["radial_speed"].as<float>();
-		space_ship_.shooting_interval_in_seconds_ = sf::seconds(root["space_ship"]["shooting_interval_in_seconds"].as<float>());
+		parseYAML(file_path);
+		space_ship_.radius_fraction_to_edge_of_screen_ = root_["space_ship"]["radius_fraction_to_edge_of_screen"].as<float>();
+		space_ship_.angular_speed_ = root_["space_ship"]["angular_speed"].as<float>();
+		space_ship_.radial_speed_ = root_["space_ship"]["radial_speed"].as<float>();
+		space_ship_.shooting_interval_in_seconds_ = sf::seconds(root_["space_ship"]["shooting_interval_in_seconds"].as<float>());
 
-		debug_.draw_bounding_boxes_ = root["debug"]["draw_bounding_boxes"].as<bool>();
+		debug_.draw_bounding_boxes_ = root_["debug"]["draw_bounding_boxes"].as<bool>();
 
-		control_.move_clockwise_ = cfg_entry_to_key[root["control"]["keyboard"]["move_clockwise"].as<std::string>()];
-		control_.move_counterclockwise_ = cfg_entry_to_key[root["control"]["keyboard"]["move_counterclockwise"].as<std::string>()];
-		control_.move_inwards_ = cfg_entry_to_key[root["control"]["keyboard"]["move_inwards"].as<std::string>()];
-		control_.move_outwards_ = cfg_entry_to_key[root["control"]["keyboard"]["move_outwards"].as<std::string>()];
-		control_.fire_ = cfg_entry_to_key[root["control"]["keyboard"]["fire"].as<std::string>()];
-		control_.reset_scene_ = cfg_entry_to_key[root["control"]["keyboard"]["reset_scene"].as<std::string>()];
+		control_.move_clockwise_ = parseKeyboardControls("move_clockwise");
+		control_.move_counterclockwise_ = parseKeyboardControls("move_counterclockwise");
+		control_.move_inwards_ = parseKeyboardControls("move_inwards");
+		control_.move_outwards_ = parseKeyboardControls("move_outwards");
+		control_.fire_ = parseKeyboardControls("fire");
+		control_.reset_scene_ = parseKeyboardControls("reset_scene");
 
-		system_.vsync_ = root["system"]["vsync"].as<bool>();
+		system_.vsync_ = root_["system"]["vsync"].as<bool>();
 	}
 	catch (const YAML::BadConversion& e) {
     	std::cerr << e.what() <<  "\n";

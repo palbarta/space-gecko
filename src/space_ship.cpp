@@ -14,10 +14,9 @@ SpaceShip::SpaceShip(const Map& map, float initial_angle)
 	, initial_angle_(initial_angle)
 {
 	object_scale_ = 0.25f;
-	radial_position_ = cfg_.radius_fraction_to_edge_of_screen_;
 	setupShape();
 	setupB2Shape();
-	setPosition(initial_angle, radial_position_);
+	setPosition(initial_angle, cfg_.radius_fraction_to_edge_of_screen_);
 	shooting_timer_.restart();
 }
 
@@ -32,7 +31,7 @@ SpaceShip::setupShape()
 	sf::Vector2f size(shape_.getTextureRect().width, shape_.getTextureRect().height);
 	shape_.setSize(size);
 	shape_.setOrigin(shape_.getSize() / 2.f);
-	setScale();
+	//setScale();
 }
 
 void
@@ -70,7 +69,6 @@ SpaceShip::angularMove(float dt, int dir)
 	initial_angle_ = new_angle;
 	setPosition(new_angle, radial_position_);
 }
-
 
 void
 SpaceShip::radialMove(float dt, int dir)
